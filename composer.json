@@ -1,0 +1,26 @@
+{
+  "name": "statigram/facebook-silex",
+  "type": "lib",
+  "homepage": "https://github.com/statigram/facebook-silex",
+  "authors": [
+    {
+      "name": "Ludovic Fleury",
+      "email": "ludo.fleury@gmail.com"
+    }
+  ],
+  "minimum-stability":"dev",
+  "require": {
+      "php": ">=5.3",
+      "silex/silex": "1.0.*",
+      "facebook/php-sdk": "dev-master"
+  },
+  "require-dev": {
+      "mageekguy/atoum": "dev-master"
+  },
+  "autoload": {
+      "psr-0": { "Statigram": "src/" }
+  },
+  "config": {
+      "bin-dir": "bin"
+  }
+}
