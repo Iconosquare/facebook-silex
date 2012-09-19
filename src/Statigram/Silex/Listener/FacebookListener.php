@@ -6,6 +6,8 @@ use Statigram\Facebook\Context\ContextFactory;
 use Statigram\Facebook\Client;
 use Statigram\Facebook\Application;
 use Statigram\Facebook\Exception\ContextException;
+use Statigram\Facebook\Exception\AuthorizationtException;
+use Statigram\Facebook\Exception\PermissionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -37,7 +39,7 @@ class FacebookListener implements EventSubscriberInterface
         $this->logger = $logger;
     }
 
-    public function onKernelRequest(GetResponseEvent $event)
+    public function contextualize(GetResponseEvent $event)
     {
         $request = $event->getRequest();
 
@@ -48,13 +50,21 @@ class FacebookListener implements EventSubscriberInterface
             $this->application->setContext($context);
 
             if (null !== $this->logger) {
-                $this->logger->info(sprintf('Facebook "%s" context defined', get_class($context)));
+                $this->logger->info(sprintf('Facebook "%s" context defined', $context->getType()));
             }
         }
     }
 
-    private function checkContexts(GetResponseEvent $event) 
+    public function checkContexts(GetResponseEvent $event) 
     {
+        if (!$this->application->hasContext()) {
+            throw new \Exception('Unable to access the application outside a Facebook context');
+
+            if (null !== $this->logger) {
+                $this->logger->error(sprintf('No Facebook context'));
+            }
+        }
+
         $contexts = $this->getRequirements($event, 'facebook.contexts');
         if (null === $contexts) {
             return; // no context restriction
@@ -62,12 +72,11 @@ class FacebookListener implements EventSubscriberInterface
 
         $currentContext = $this->application->hasContext() ? $this->application->getContext() : 'stand-alone';
 
-        if (in_array($currentContext::TYPE, $contexts)) {
+        if (in_array($currentContext->getType(), $contexts)) {
 
-            $message = sprintf('Not acceptable Facebook context "%s" for the route "%s" (only "%s" context allowed)', 
-                $currentContext, 
-                $routeName,
-                implode(', ' $contexts));
+            $message = sprintf('Not acceptable Facebook context "%s". Context allowed: [ %s ]', 
+                $currentContext->getType(),
+                implode(', ', $contexts));
 
             if (null !== $this->logger) {
                 $this->logger->error($message);
@@ -77,7 +86,7 @@ class FacebookListener implements EventSubscriberInterface
         }
 
         if (null !== $this->logger) {
-            $this->logger->info(sprintf('Facebook "%s" context allowed for the route "%s"', $currentContext, $routeName));
+            $this->logger->info(sprintf('Facebook "%s" context allowed', $currentContext->getType()));
         }
     }
 
@@ -88,7 +97,19 @@ class FacebookListener implements EventSubscriberInterface
             return; // no authorization requirements
         }
 
+        if (!$this->application->isAuthorized()) {
+            $message = sprintf('Facebook application is not authorized by the current user');
 
+            if (null !== $this->logger) {
+                $this->logger->error($message);
+            }
+
+            throw new AuthorizationException($message);
+        }
+
+        if (null !== $this->logger) {
+            $this->logger->info(sprintf('Facebook application is authorized by the current user'));
+        }
     }
 
     public function checkPermissions(GetResponseEvent $event)
@@ -98,34 +119,20 @@ class FacebookListener implements EventSubscriberInterface
             return; // no permission requirements
         }
 
-        $result = $this->client->api('/me/permissions');
-        
-        if (!isset($result['data'][0])) {
-            // @todo review this scenario (and type the exception if needed)
-            throw new \RuntimeException('Unable to retrieve permission'); 
-        } 
-
-        $granted = $result['data'][0];
-        $missing = array();
-
-        foreach ($permissions as $permission) {
-            if (!isset($granted[$permission]) || $granted[$permission] !== 1) {
-               $missing[] = $permission;
-            }
-        }
+        $missing = $this->application->validatePermissions($permissions);
 
         if (count($missing) > 0) {
-            $message = sprintf('Insufficient Facebook permissions. [ %s ] permission is required', implode(', ' $missing));
+            $message = sprintf('Insufficient Facebook permissions. Permissions required: [ %s ]', implode(', ' $missing));
 
             if (null !== $this->logger) {
                 $this->logger->error($message);
             }
 
-            throw new FacebookPermissionException($message);
+            throw new PermissionException($message);
         }
 
         if (null !== $this->logger) {
-            $this->logger->info(sprintf('Facebook [ %s ] permission granted for the route "%s"', implode(', ' $permissions), $routeName));
+            $this->logger->info(sprintf('Facebook application permissions granted');
         }
     }
 

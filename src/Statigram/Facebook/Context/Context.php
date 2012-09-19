@@ -21,6 +21,11 @@ abstract class Context
 		$this->setUser($user);
 	}
 
+	public function __toString()
+	{
+		return $this->getType();
+	}
+
 	/**
 	 * Return the Facebook user
 	 *

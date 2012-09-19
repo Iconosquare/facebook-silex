@@ -99,6 +99,63 @@ trait FacebookTrait
 		return $this['facebook.application']->isTab();
 	}
 
+	/**
+	 * Check whether the Facebook application is authorized by the current user
+	 *
+	 * @return boolean
+	 */
+	public function isAuthorized()
+	{
+		return $this['facebook']->isAuthorized();
+	}
+
+	/**
+	 * Return the Facebook application permissions
+	 *
+	 * List of permissions allowed to this application by the current user
+	 *
+	 * @return array
+	 */
+	public function getPermissions()
+	{
+		return $this['facebook']->getPermissions();
+	}
+
+	/**
+	 * Check whether the Facebook application has a specific permission
+	 *
+	 * @param string $permission
+	 *
+	 * @return boolean
+	 */
+	public function hasPermission($permission)
+	{
+		return $this['facebook']->hasPermission($permission);
+	}
+
+	/**
+	 * Check whether the Facebook application has some permissions
+	 *
+	 * Return an array of "missing" permissions
+	 * Don't check the return value in a boolean fashion-way
+	 * because an empty array mean all permissions are granted.
+	 *
+	 * @param array $permissions
+	 *
+	 * @return array $missing
+	 */
+	public function validatePermissions(array $permissions)
+	{
+		return $this['facebook']->validatePermissions($permissions);
+	}
+
+	/**
+	 * Return the Facebook authorization absolute url
+	 *
+	 * @param string $redirectUri
+	 *
+	 * @return string 
+	 */
 	public function getAuthorizationUrl($redirectUri = null)
 	{
 		return $this['facebook.application']->getAuthorizationUrl($redirectUri);

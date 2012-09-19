@@ -21,14 +21,15 @@ class Client extends \Facebook
 		parent::__construct(array('appId' => $id, 'secret' => $secret));
 	}
 
-	/**
-	 * Return a response which trigger the authentification process
-	 *
-	 * @return Response A special response which forces the pages/canvas to be refreshed to the authentification location
-	 */
-	public function authentification()
+	public function getPermissions()
 	{
-		return new Response(sprintf("<script>top.location.href='%s'</script>", $this->getSigninUrl()));
+		$result = $this->api('/me/permissions');
+		if (!isset($result['data'][0])) {
+            // @todo review this scenario (and type the exception if needed)
+            throw new \RuntimeException('Unable to retrieve permission'); 
+        }
+
+        return $result['data'][0];
 	}
 
     public function getPages()

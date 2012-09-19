@@ -95,6 +95,16 @@ class User
 	}
 
 	/**
+	 * Check whether the Facebook user has an OAuth access token
+	 *
+	 * @return boolean
+	 */
+	public function hasAccess()
+	{
+		return $this->access instanceof Access;
+	}
+
+	/**
 	 * Return the Facebook user OAuth access token
 	 *
 	 * @return Statigram\Facebook\Access

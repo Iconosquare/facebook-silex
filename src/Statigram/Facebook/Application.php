@@ -24,11 +24,7 @@ class Application extends BaseApplication
 	 */
 	public function isCanvas()
 	{
-		if ($this->hasContext()) {
-			return $this->getContext() instanceof Statigram\Facebook\Context\Canvas; 
-		} 
-
-		return false;
+		return 'canvas' === $this->getContext()->getType();
 	}
 
 	/**
@@ -38,11 +34,7 @@ class Application extends BaseApplication
 	 */
 	public function isTab()
 	{
-		if ($this->hasContext()) {
-			return $this->getContext() instanceof Statigram\Facebook\Context\Tab; 
-		} 
-
-		return false;
+		return 'tab' === $this->getContext()->getType(); 
 	}
 
 	/**
@@ -73,6 +65,73 @@ class Application extends BaseApplication
 	public function authorize($redirectUri = null)
 	{
 		return $this->redirect($this->getAuthorizationUrl($redirectUri));
+	}
+
+	/**
+	 * Check whether the Facebook application is authorized by the current user
+	 *
+	 * @return boolean
+	 */
+	public function isAuthorized()
+	{
+		return $this->getContext()->getUser()->hasAccess();
+	}
+
+	/**
+	 * Return the Facebook application permissions
+	 *
+	 * List of permissions allowed to this application by the current user
+	 *
+	 * @return array
+	 */
+	public function getPermissions()
+	{
+		return $this->client->getPermissions();
+	}
+
+	/**
+	 * Check whether the Facebook application has a specific permission
+	 *
+	 * @param string $permission
+	 *
+	 * @return boolean
+	 */
+	public function hasPermission($permission)
+	{
+		$granted = $this->getPermissions();
+
+        foreach ($permissions as $permission) {
+            if (isset($granted[$permission]) && $granted[$permission] === 1) {
+            	return true;
+            }
+        }
+
+        return false;
+	}
+
+	/**
+	 * Check whether the Facebook application has some permissions
+	 *
+	 * Return an array of "missing" permissions
+	 * Don't check the return value in a boolean fashion-way
+	 * because an empty array mean all permissions are granted.
+	 *
+	 * @param array $permissions
+	 *
+	 * @return array $missing
+	 */
+	public function validatePermissions(array $permissions)
+	{
+        $granted = $this->getPermissions();
+        $missing = array();
+
+        foreach ($permissions as $permission) {
+            if (!isset($granted[$permission]) || $granted[$permission] !== 1) {
+               $missing[] = $permission;
+            }
+        }
+
+        return $missing;
 	}
 
 	/**
