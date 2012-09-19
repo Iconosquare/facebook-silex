@@ -2,6 +2,9 @@
 
 namespace Statigram\Silex\Listener;
 
+use Statigram\Facebook\Context\ContextFactory;
+use Statigram\Facebook\Client;
+use Statigram\Facebook\Application;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -21,7 +24,6 @@ class FacebookListener implements EventSubscriberInterface
     {
         $this->contextFactory = $contextFactory;
         $this->client = $client;
-        $this->session = $session;
         $this->logger = $logger;
     }
 

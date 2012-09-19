@@ -33,10 +33,10 @@ class Application
 
 	public function __construct($id, $secret, $canvasUrl, array $scopes)
 	{
-		$this->canvasUrl($canvasUrl);
+		$this->setCanvasUrl($canvasUrl);
 		$this->setId($id);
-		$this->secret($secret);
-		$this->scopes($scopes);
+		$this->setSecret($secret);
+		$this->setScopes($scopes);
 	}
 
 	/**

@@ -2,6 +2,8 @@
 
 namespace Statigram\Facebook;
 
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 /**
  * Facebook php-sdk wrapper
  *
@@ -9,9 +11,14 @@ namespace Statigram\Facebook;
  */
 class Client extends \Facebook
 {
-	public function __construct(array $parameters)
+	protected static $allowedKeys = array('state', 'code', 'access_token', 'user_id');
+	protected $session;
+
+	public function __construct(SessionInterface $session, $id, $secret)
 	{
-		parent::__construct($parameters);
+		$this->session = $session;
+		$this->session->start();
+		parent::__construct(array('appId' => $id, 'secret' => $secret));
 	}
 
 	/**
@@ -35,5 +42,53 @@ class Client extends \Facebook
 		});
 
         return $pages;
+	}
+
+	protected function setPersistentData($key, $value) 
+	{
+	    if (!in_array($key, self::$allowedKeys)) {
+	      self::errorLog('Unsupported key passed to setPersistentData.');
+	      return;
+	    }
+
+	    $formattedKey = $this->constructSessionVariableName($key);
+
+	    $this->session->set($formattedKey, $value);
+  	}
+
+	protected function getPersistentData($key, $default = false) 
+	{
+		if (!in_array($key, self::$allowedKeys)) {
+		  self::errorLog('Unsupported key passed to getPersistentData.');
+		  return $default;
+		}
+
+		$formattedKey = $this->constructSessionVariableName($key);
+
+		return $this->session->get($formattedKey, $default);
+	}
+
+	protected function clearPersistentData($key) 
+	{
+		if (!in_array($key, self::$allowedKeys)) {
+		  self::errorLog('Unsupported key passed to clearPersistentData.');
+		  return;
+		}
+
+		$formattedKey = $this->constructSessionVariableName($key);
+		
+		$this->session->remove($formattedKey);
+	}
+
+	protected function clearAllPersistentData() 
+	{
+		foreach (self::$allowedKeys as $key) {
+			$this->clearPersistentData($key);
+		}
+	}
+
+	protected function constructSessionVariableName($key) 
+	{
+		return 'facebook.client.'.(($this->sharedSessionID) ?: null ).$this->getAppId().$key;
 	}
 }

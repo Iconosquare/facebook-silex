@@ -25,7 +25,7 @@ class Application extends BaseApplication
 	public function isCanvas()
 	{
 		if ($this->hasContext()) {
-			return 'Statigram\\Facebook\\Context\\Canvas' instanceof $this->getContext(); 
+			return $this->getContext() instanceof Statigram\Facebook\Context\Canvas; 
 		} 
 
 		return false;
@@ -39,7 +39,7 @@ class Application extends BaseApplication
 	public function isTab()
 	{
 		if ($this->hasContext()) {
-			return 'Statigram\\Facebook\\Context\\Tab' instanceof $this->getContext(); 
+			return $this->getContext() instanceof Statigram\Facebook\Context\Tab; 
 		} 
 
 		return false;
