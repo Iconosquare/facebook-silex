@@ -12,11 +12,41 @@ trait FacebookTrait
 	/**
 	 * Return the Graph API client
 	 *
-	 * @return PlayBloom\Facebook\Client
+	 * @return Statigram\Facebook\Client
 	 */
 	public function getClient()
 	{
 		return $this['facebook.client'];
+	}
+
+	/**
+	 * Return the Facebook application id
+	 *
+	 * @return string
+	 */
+	public function getId()
+	{
+		return $this['facebook']->getId();
+	}
+
+	/**
+	 * Return the Facebook application secret
+	 *
+	 * @return string
+	 */
+	public function getSecret()
+	{
+		return $this['facebook']->getSecret();
+	}
+
+	/**
+	 * Return the Facebook canvas url
+	 *
+	 * @return string
+	 */
+	public function getCanvasUrl()
+	{
+		return $this['facebook']->getCanvasUrl();
 	}
 
 	/**
@@ -81,7 +111,7 @@ trait FacebookTrait
 	 *
 	 * @return Statigram\Facebook\Response
 	 */
-	public function authorize($redirectUri = null)
+	public function requestAuthorization($redirectUri = null)
 	{
 		return $this['facebook.application']->authorize($redirectUri);
 	}

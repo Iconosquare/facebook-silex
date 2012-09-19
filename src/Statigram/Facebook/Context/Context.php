@@ -40,4 +40,6 @@ abstract class Context
 	{
 		$this->user = $user;
 	}
+
+	abstract public function getType();
 }

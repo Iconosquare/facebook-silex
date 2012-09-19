@@ -15,4 +15,17 @@ class Canvas extends Context
 	{
 		parent::__construct($user);
 	}
+
+	/**
+	 * Return the context type
+	 *
+	 * Abstract implementation
+	 * @see Statigram\Facebook\Context\Context
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return 'canvas';
+	}
 }

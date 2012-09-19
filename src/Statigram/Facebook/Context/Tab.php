@@ -24,6 +24,19 @@ class Tab extends Context
 	}
 
 	/**
+	 * Return the context type
+	 *
+	 * Abstract implementation
+	 * @see Statigram\Facebook\Context\Context
+	 *
+	 * @return string
+	 */
+	public function getType()
+	{
+		return 'tab';
+	}
+
+	/**
 	 * Return the Facebook page
 	 *
 	 * @return Statigram\Facebook\Page
