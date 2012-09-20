@@ -74,9 +74,9 @@ class FacebookListener implements EventSubscriberInterface
             return; // no context restriction
         }
 
-        $currentContext = $this->application->hasContext() ? $this->application->getContext() : 'stand-alone';
+        $currentContext = $this->application->hasContext() ? $this->application->getContext();
 
-        if (in_array($currentContext->getType(), $contexts)) {
+        if (!in_array($currentContext->getType(), $contexts)) {
 
             $message = sprintf('Not acceptable Facebook context "%s". Context allowed: [ %s ]', 
                 $currentContext->getType(),
