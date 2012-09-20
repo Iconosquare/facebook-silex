@@ -2,14 +2,12 @@
 
 namespace Statigram\Facebook\Exception;
 
-use Symfony\Component\HttpKernel\HttpException;
-
 /**
- * Facebook context exception
+ * Facebook application context exception
  *
  * @author Ludovic Fleury <ludo.fleury@gmail.com>
  */
-class ContextException extends HttpException
+class ContextException extends FacebookException
 {
 	public function __construct($message)
 	{

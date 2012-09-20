@@ -2,14 +2,12 @@
 
 namespace Statigram\Facebook\Exception;
 
-use Symfony\Component\HttpKernel\HttpException;
-
 /**
- * Facebook permission exception
+ * Facebook application permission exception
  *
  * @author Ludovic Fleury <ludo.fleury@gmail.com>
  */
-class PermissionException extends HttpException
+class PermissionException extends FacebookException
 {
 	public function __construct($message)
 	{

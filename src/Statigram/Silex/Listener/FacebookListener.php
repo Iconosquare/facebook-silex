@@ -121,8 +121,8 @@ class FacebookListener implements EventSubscriberInterface
 
         $missing = $this->application->validatePermissions($permissions);
 
-        if (count($missing) > 0) {
-            $message = sprintf('Insufficient Facebook permissions. Permissions required: [ %s ]', implode(', ' $missing));
+        if (count($missing) > 0)) {
+            $message = sprintf('Insufficient Facebook permissions. Permissions required: [ %s ]', implode(', ', $missing));
 
             if (null !== $this->logger) {
                 $this->logger->error($message);
@@ -132,7 +132,7 @@ class FacebookListener implements EventSubscriberInterface
         }
 
         if (null !== $this->logger) {
-            $this->logger->info(sprintf('Facebook application permissions granted');
+            $this->logger->info(sprintf('Facebook application permissions granted'));
         }
     }
 
