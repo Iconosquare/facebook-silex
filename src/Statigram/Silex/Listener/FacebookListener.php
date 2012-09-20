@@ -47,12 +47,6 @@ class FacebookListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        // all the api call will now be done on the behalf of the authenticated user 
-        // we replace the app access token by the user access token
-        if ($this->application->isAuthorized()) {
-            $this->client->setAccessToken($this->application->getContext()->getUser()->getAccess()->getToken());
-        }
-
         if ($request->isMethod('post') && $request->request->has('signed_request')) {
             $parameters = $this->client->getSignedRequest();
             $context = $this->contextFactory->create($parameters);
@@ -121,8 +115,15 @@ class FacebookListener implements EventSubscriberInterface
             throw new AuthorizationException($message);
         }
 
+
+        // all the api call will now be done on the behalf of the authenticated user 
+        // we replace the app access token by the user access token
+        if ($this->application->isAuthorized()) {
+            $this->client->setAccessToken($this->application->getContext()->getUser()->getAccess()->getToken());
+        }
+
         if (null !== $this->logger) {
-            $this->logger->info(sprintf('Facebook application is authorized by the current user'));
+            $this->logger->info(sprintf('Facebook application is authorized by the current user (switch to user access token)'));
         }
     }
 
@@ -156,6 +157,7 @@ class FacebookListener implements EventSubscriberInterface
             KernelEvents::REQUEST => array(
                 array('contextualize', 64), 
                 array('checkContexts'),
+                array('checkAuthorization'),
                 array('checkPermissions'),
             ),
         );
