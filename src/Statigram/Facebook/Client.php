@@ -21,13 +21,9 @@ class Client extends \Facebook
 		parent::__construct(array('appId' => $id, 'secret' => $secret));
 	}
 
-	public function getPermissions()
+	public function getPermissions($userAccessToken)
 	{
-		$result = $this->api('/me/permissions');
-		if (!isset($result['data'][0])) {
-            // @todo review this scenario (and type the exception if needed)
-            throw new \RuntimeException('Unable to retrieve permission'); 
-        }
+		$result = $this->api('/me/permissions?access_token='.$userAccessToken);
 
         return $result['data'][0];
 	}

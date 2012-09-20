@@ -2,6 +2,7 @@
 
 namespace Statigram\Facebook;
 
+use Statigram\Facebook\Exception\AuthorizationException;
 use Statigram\Facebook\Http\RedirectResponse;
 use Statigram\Facebook\Model\Application as BaseApplication;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -87,7 +88,11 @@ class Application extends BaseApplication
 	 */
 	public function getPermissions()
 	{
-		return $this->client->getPermissions();
+		if (!$this->isAuthorized()) {
+			throw new FacebookAuthorizationException('Unable to check permission since the user didn\'t allow the application');
+		}
+
+		return $this->client->getPermissions($this->getContext()->getUser()->getAccess()->getToken());	
 	}
 
 	/**
