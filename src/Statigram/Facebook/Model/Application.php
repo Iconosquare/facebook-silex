@@ -88,7 +88,7 @@ class Application
 	 */
 	public function getScopes($inline = false)
 	{
-		return ($inline) ? implode(',', $this->$scopes) : $this->$scopes; 
+		return ($inline) ? implode(',', $this->scopes) : $this->scopes; 
 	}
 
 	/**
