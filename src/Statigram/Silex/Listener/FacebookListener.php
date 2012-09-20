@@ -117,7 +117,9 @@ class FacebookListener implements EventSubscriberInterface
 
         // all the api call will now be done on the behalf of the authenticated user 
         // we replace the app access token by the user access token
+        var_dump($this->client->getAccessToken());
         $this->client->setAccessToken($this->application->getUser()->getAccess()->getToken());
+        var_dump($this->client->getAccessToken());
 
         if (null !== $this->logger) {
             $this->logger->info(sprintf('Facebook application is authorized by the current user'));
