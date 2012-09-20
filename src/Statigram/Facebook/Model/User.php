@@ -2,6 +2,8 @@
 
 namespace Statigram\Facebook\Model;
 
+use Statigram\Facebook\OAuth\Access;
+
 /**
  * Facebook user
  *
