@@ -23,7 +23,7 @@ class Client extends \Facebook
 
 	public function getPermissions($userAccessToken)
 	{
-		$result = $this->api('/me/permissions?access_token='.$userAccessToken);
+		$result = $this->api('/me/permissions', array('access_token' => $userAccessToken));
 
         return $result['data'][0];
 	}
