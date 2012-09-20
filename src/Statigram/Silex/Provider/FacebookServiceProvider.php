@@ -40,7 +40,7 @@ class FacebookServiceProvider implements ServiceProviderInterface
 
     public function boot(SilexApplication $app)
     {
-        $app['dispatcher']->addSubscriber(new FacebookListener($app['facebook.context_factory'], $app['facebook.client'], $app['facebook'], $app['logger']));
+        $app['dispatcher']->addSubscriber(new FacebookListener($app['routes'], $app['facebook.context_factory'], $app['facebook.client'], $app['facebook'], $app['logger']));
     }
 }
 

@@ -12,6 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Initializes the context from the request and sets request attributes based on a matching route.
@@ -20,6 +21,8 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
  */
 class FacebookListener implements EventSubscriberInterface
 {
+    private $routes;
+
     private $contextFactory;
 
     private $client;
@@ -31,7 +34,7 @@ class FacebookListener implements EventSubscriberInterface
     /**
      * Constructor.
      */
-    public function __construct(ContextFactory $contextFactory, Client $client, Application $application, LoggerInterface $logger = null)
+    public function __construct(RouteCollection $routes, ContextFactory $contextFactory, Client $client, Application $application, LoggerInterface $logger = null)
     {
         $this->contextFactory = $contextFactory;
         $this->client = $client;
@@ -151,7 +154,7 @@ class FacebookListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $routeName = $request->attributes->get('_route');
-        $route = $routes->get($routeName);
+        $route = $this->routes->get($routeName);
         
         return $route->getOption($name);
     }
