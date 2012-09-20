@@ -15,6 +15,7 @@ class Application extends BaseApplication
 	{
 		parent::__construct($id, $secret, $canvasUrl, $scopes);
 		$this->session = $session;
+		$this->client = $client;
 	}
 
 	/**
