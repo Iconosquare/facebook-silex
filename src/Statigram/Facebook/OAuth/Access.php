@@ -24,7 +24,7 @@ class Access
 	 */
 	public function __construct($token, $issued, $expires)
 	{
-		$this->token = token;
+		$this->token = $token;
 		$this->delay = time() - (int) $issued;
 		$this->expires = (int) $expires;
 	}
