@@ -112,7 +112,7 @@ class Application
 	 */
 	public function getCanvasUrl()
 	{
-		return $this->$canvasUrl;
+		return $this->canvasUrl;
 	}
 
 	/**
