@@ -46,7 +46,7 @@ class Client extends \Facebook
 	}
 
 	protected function setPersistentData($key, $value) 
-	{
+	{var_dump('set: '.$key)
 	    if (!in_array($key, self::$allowedKeys)) {
 	      self::errorLog('Unsupported key passed to setPersistentData.');
 	      return;
@@ -55,6 +55,7 @@ class Client extends \Facebook
 	    $formattedKey = $this->constructSessionVariableName($key);
 
 	    $this->session->set($formattedKey, $value);
+	    print_r($this->sessions);
   	}
 
 	protected function getPersistentData($key, $default = false) 
