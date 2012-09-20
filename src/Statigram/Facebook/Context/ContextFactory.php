@@ -4,7 +4,7 @@ namespace Statigram\Facebook\Context;
 
 use Statigram\Facebook\Context\Canvas;
 use Statigram\Facebook\Context\Tab;
-use Statigram\Facebook\Model\Page
+use Statigram\Facebook\Model\Page;
 use Statigram\Facebook\Model\User;
 use Statigram\Facebook\OAuth\Access;
 
