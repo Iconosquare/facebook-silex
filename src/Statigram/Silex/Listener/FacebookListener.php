@@ -36,6 +36,7 @@ class FacebookListener implements EventSubscriberInterface
      */
     public function __construct(RouteCollection $routes, ContextFactory $contextFactory, Client $client, Application $application, LoggerInterface $logger = null)
     {
+        $this->routes = $routes;
         $this->contextFactory = $contextFactory;
         $this->client = $client;
         $this->application = $application;
