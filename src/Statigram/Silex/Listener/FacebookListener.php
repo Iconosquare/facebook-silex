@@ -50,7 +50,7 @@ class FacebookListener implements EventSubscriberInterface
         // all the api call will now be done on the behalf of the authenticated user 
         // we replace the app access token by the user access token
         if ($this->application->isAuthorized()) {
-            $this->client->setAccessToken($this->application->getUser()->getAccess()->getToken());
+            $this->client->setAccessToken($this->application->getContext()->getUser()->getAccess()->getToken());
         }
 
         if ($request->isMethod('post') && $request->request->has('signed_request')) {
