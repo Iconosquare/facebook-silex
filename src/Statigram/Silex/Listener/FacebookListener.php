@@ -151,7 +151,7 @@ class FacebookListener implements EventSubscriberInterface
     {
         $request = $event->getRequest();
         $routeName = $request->attributes->get('_route');
-        $route = $this['routes']->get($routeName);
+        $route = $routes->get($routeName);
         
         return $route->getOption($name);
     }
