@@ -21,9 +21,9 @@ class Client extends \Facebook
 		parent::__construct(array('appId' => $id, 'secret' => $secret));
 	}
 
-	public function getPermissions($userAccessToken)
+	public function getPermissions()
 	{
-		$result = $this->api('/me/permissions', array('access_token' => $userAccessToken));
+		$result = $this->api('/me/permissions');
 
         return $result['data'][0];
 	}
@@ -51,7 +51,6 @@ class Client extends \Facebook
 	    $formattedKey = $this->constructSessionVariableName($key);
 
 	    $this->session->set($formattedKey, $value);
-	    print_r($this->sessions);
   	}
 
 	protected function getPersistentData($key, $default = false) 
