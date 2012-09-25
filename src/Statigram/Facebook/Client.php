@@ -63,7 +63,7 @@ class Client extends \Facebook
 	{
 		$url = sprintf('/%s/tabs/%s', $page->getId(), $application->getId());
 		
-		$content = $this->api($url, $parameters);
+		$content = $this->api($url);
 
 		if (empty($content['data'])) {
 
