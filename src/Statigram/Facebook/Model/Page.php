@@ -2,6 +2,8 @@
 
 namespace Statigram\Facebook\Model;
 
+use Statigram\Facebook\OAuth\Access;
+
 /**
  * Facebook page
  * 
@@ -16,6 +18,7 @@ class Page
 	private $id;
 	private $admin;
 	private $liked;
+	private $access;
 
 	public function __construct($id)
 	{
@@ -50,5 +53,15 @@ class Page
 	public function setLiked($liked)
 	{
 		$this->liked = $liked;
+	}
+
+	public function setAccess(Access $access)
+	{
+		$this->access = $access;
+	}
+
+	public function getAccess()
+	{
+		return $this->access;
 	}
 }
