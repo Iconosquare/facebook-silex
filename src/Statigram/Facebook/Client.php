@@ -59,7 +59,7 @@ class Client extends \Facebook
 	 *
 	 * @see https://developers.facebook.com/docs/reference/api/page/#tabs §Testing App Installs
 	 */
-	public function getTab(Page $page, Application $application)
+	public function getTab(Model\Page $page, Model\Application $application)
 	{
 		$url = sprintf('/%s/tabs/%s', $page->getId(), $application->getId());
 		
