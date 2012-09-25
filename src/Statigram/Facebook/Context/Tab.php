@@ -55,4 +55,14 @@ class Tab extends Context
 	{
 		$this->page = $page;
 	}
+
+	/**
+	 * Check wheter the current user is admin of the page
+	 *
+	 * @return bool
+	 */
+	public function isManageable()
+	{
+		return true === $this->page->getAdmin();
+	}
 }

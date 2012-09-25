@@ -6,7 +6,7 @@ use Statigram\Facebook\Context\ContextFactory;
 use Statigram\Facebook\Client;
 use Statigram\Facebook\Application;
 use Statigram\Facebook\Exception\ContextException;
-use Statigram\Facebook\Exception\AuthorizationtException;
+use Statigram\Facebook\Exception\AuthorizationException;
 use Statigram\Facebook\Exception\PermissionException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
