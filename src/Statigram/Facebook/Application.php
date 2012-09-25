@@ -14,7 +14,12 @@ class Application extends BaseApplication
 
 	public function __construct($id, $secret, $canvasUrl, array $scopes, SessionInterface $session, Client $client)
 	{
-		parent::__construct($id, $secret, $canvasUrl, $scopes);
+		parent::__construct($id);
+		
+		$this->setCanvasUrl($canvasUrl);
+		$this->setSecret($secret);
+		$this->setScopes($scopes);
+
 		$this->session = $session;
 		$this->client = $client;
 	}

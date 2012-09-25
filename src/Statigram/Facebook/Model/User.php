@@ -7,7 +7,6 @@ use Statigram\Facebook\OAuth\Access;
 /**
  * Facebook user
  *
- * Represent a facebook user from an signed_request
  * Could be easily converted to trait for php 5.4
  * May be completed with a User Graph API resource 
  *
@@ -24,6 +23,11 @@ class User
 	 * @var string Facebook iso country code
 	 */
 	private $country;
+
+	/**
+	 * @var string Facebook email
+	 */
+	private $email;
 
 	/**
 	 * @var string Facebook iso locale code
@@ -54,6 +58,26 @@ class User
 	public function setId($id)
 	{
 		$this->id = $id;
+	}
+
+	/**
+	 * Return the Facebook user email
+	 *
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $email;
+	}
+
+	/**
+	 * Define the Facebook user email
+	 *
+	 * @param string
+	 */
+	public function setEmail($email)
+	{
+		$this->email = $email;
 	}
 
 	/**

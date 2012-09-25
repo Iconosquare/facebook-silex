@@ -21,24 +21,76 @@ class Client extends \Facebook
 		parent::__construct(array('appId' => $id, 'secret' => $secret));
 	}
 
+	public function getUser($accessToken = null)
+	{
+		$content = $this->api('/me');
+
+		if (!empty($content)) {
+			return null;
+		}
+
+		$user = new Model\User();
+		$user->setEmail($content['email']);
+
+		return $user;
+	}
+
 	public function getPermissions()
 	{
-		$result = $this->api('/me/permissions');
+		$content = $this->api('/me/permissions');
 
-        return $result['data'][0];
+        return $content['data'][0];
 	}
 
     public function getPages()
 	{
-		$accounts = $this->api('/me/accounts');
+		$content = $this->api('/me/accounts');
 
 		$pages = array();
-		
-		$pages = array_filter($accounts['data'], function($account) {
+		$pages = array_filter($content['data'], function($account) {
 			return $account['category'] != 'Application';
 		});
 
         return $pages;
+	}
+
+	/**
+	 * Get an installed tab
+	 *
+	 * @see https://developers.facebook.com/docs/reference/api/page/#tabs §Testing App Installs
+	 */
+	public function getTab(Page $page, Application $application)
+	{
+		$url = sprintf('/%s/tabs/%s', $page->getId(), $application->getId());
+		
+		$content = $this->api($url, $parameters);
+
+		if (empty($content['data'])) {
+
+			return null;
+		}
+
+		$application = new Model\Application($content['data']['application']['id']);
+		$application->setName($content['data']['application']['name']);
+
+		$tab = new Model\Tab($content['data']['id']);
+		$tab->setName($content['data']['name']);
+		$tab->setLink($content['data']['link']);
+		$tab->setApplication($application);
+		$tab->setPosition($content['data']['position']);
+		
+		return $tab;
+	}
+
+	public function addTab(Page $page, Application $application)
+	{
+		$url = sprintf('/%s/tabs', $page->getId());
+		$parameters = array(
+			'app_id' =>  $application->getId(),
+			'access_token' => $page->getAccess()->getToken()
+		);
+
+		$content = $this->api($url, 'post', $parameters);
 	}
 
 	protected function setPersistentData($key, $value) 

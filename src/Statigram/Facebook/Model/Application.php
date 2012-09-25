@@ -17,6 +17,11 @@ class Application
 	private $id;
 
 	/**
+	 * @var string Facebook application name
+	 */
+	private $name;
+
+	/**
 	 * @var string Facebook application secret
 	 */
 	private $secret;
@@ -31,12 +36,9 @@ class Application
 	 */
 	private $scopes;
 
-	public function __construct($id, $secret, $canvasUrl, array $scopes)
+	public function __construct($id)
 	{
-		$this->setCanvasUrl($canvasUrl);
 		$this->setId($id);
-		$this->setSecret($secret);
-		$this->setScopes($scopes);
 	}
 
 	/**
@@ -58,6 +60,26 @@ class Application
 	{
 		$this->id = $id;
 	}
+
+	/**
+	 * Return the Facebook application name
+	 *
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * Define the Facebook application name
+	 *
+	 * @return string
+	 */
+	public function setName($name)
+	{
+		$this->name = $name;
+	}	
 
 	/**
 	 * Return the Facebook application secret

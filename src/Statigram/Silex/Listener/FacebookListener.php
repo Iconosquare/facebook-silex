@@ -115,7 +115,6 @@ class FacebookListener implements EventSubscriberInterface
             throw new AuthorizationException($message);
         }
 
-
         // all the api call will now be done on the behalf of the authenticated user 
         // we replace the app access token by the user access token
         if ($this->application->isAuthorized()) {

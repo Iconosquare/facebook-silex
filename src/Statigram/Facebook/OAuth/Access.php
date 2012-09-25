@@ -22,7 +22,7 @@ class Access
 	 * @param int    $issued  Current time on the remote server as unix timestamp
 	 * @param int    $expires Token expiration time on the remote server as unix timestamp
 	 */
-	public function __construct($token, $issued, $expires)
+	public function __construct($token = null, $issued = null, $expires = null)
 	{
 		$this->token = $token;
 		$this->delay = time() - (int) $issued;
