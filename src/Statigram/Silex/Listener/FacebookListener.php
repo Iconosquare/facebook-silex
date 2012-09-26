@@ -159,7 +159,7 @@ class FacebookListener implements EventSubscriberInterface
         }
 
         if (!$this->application->isTab()) {
-            throw new \LogicException('Unable to check facebook page admin requirement: the context is not a page');
+            throw new \LogicException('Unable to check facebook page admin requirement: the context is not a tab');
         }
 
         if(!$this->application->getContext()->isManageable()) {

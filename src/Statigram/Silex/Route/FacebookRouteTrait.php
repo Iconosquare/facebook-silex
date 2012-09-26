@@ -54,8 +54,8 @@ trait FacebookRouteTrait
     {
         $this->setOption('facebook.page_admin', true);
 
-        if (count($contexts) !== 1 || !in_array('page', $contexts)) {
-            throw new \RuntimeException('Unable to require a Facebook page administrator: the route must be restricted to a page context only');
+        if (count($contexts) !== 1 || !in_array('tab', $contexts)) {
+            throw new \RuntimeException('Unable to require a Facebook page administrator: the route must be restricted to a tab context only');
         }
 
         return $this;
