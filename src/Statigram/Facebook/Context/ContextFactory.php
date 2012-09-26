@@ -30,8 +30,7 @@ class ContextFactory
     	$user = $this->createUser($parameters);
 
     	if (isset($parameters['page']) && isset($parameters['page']['id'])) {
-    		$page = new Page();
-            $page->setId($parameters['page']['id']);
+    		$page = new Page($parameters['page']['id']);
     		$page->setAdmin($parameters['page']['admin']);
     		$page->setLiked($parameters['page']['liked']);
 
