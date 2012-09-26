@@ -8,6 +8,7 @@ use Statigram\Facebook\Application;
 use Statigram\Facebook\Exception\ContextException;
 use Statigram\Facebook\Exception\AuthorizationException;
 use Statigram\Facebook\Exception\PermissionException;
+use Statigram\Facebook\Exception\RoleException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -150,6 +151,22 @@ class FacebookListener implements EventSubscriberInterface
         }
     }
 
+    public function checkPageAdmin(GetResponseEvent $event)
+    {
+        $admin = $this->getRequirements($event, 'facebook.page_admin');
+        if (null === $admin) {
+            return; // no page admin requirements
+        }
+
+        if (!$this->application->isTab()) {
+            throw new \LogicException('Unable to check facebook page admin requirement: the context is not a page');
+        }
+
+        if(!$this->application->getContext()->isManageable()) {
+            throw new RoleException('Access restricted to the page admin');
+        }
+    }
+
     public static function getSubscribedEvents()
     {
         return array(
@@ -158,6 +175,7 @@ class FacebookListener implements EventSubscriberInterface
                 array('checkContexts'),
                 array('checkAuthorization'),
                 array('checkPermissions'),
+                array('checkPageAdmin')
             ),
         );
     }

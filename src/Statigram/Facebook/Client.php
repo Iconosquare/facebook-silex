@@ -138,6 +138,6 @@ class Client extends \Facebook
 
 	protected function constructSessionVariableName($key) 
 	{
-		return 'facebook.client.'.(($this->sharedSessionID) ?: null ).$this->getAppId().$key;
+		return 'facebook.'.$this->getAppId().'.client.'.$key;
 	}
 }

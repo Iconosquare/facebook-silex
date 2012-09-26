@@ -165,7 +165,7 @@ class Application extends BaseApplication
 	 */
 	public function hasContext()
 	{
-		return $this->session->has('facebook');
+		return $this->session->has('facebook.'.$this->getId());
 	}
 
 	/**
@@ -175,7 +175,7 @@ class Application extends BaseApplication
 	 */
 	public function setContext($context)
 	{
-		$this->session->set('facebook', $context);
+		$this->session->set('facebook.'.$this->getId(), $context);
 	}
 
 	/**
@@ -185,6 +185,6 @@ class Application extends BaseApplication
 	 */
 	public function getContext()
 	{
-		return $this->session->get('facebook');
+		return $this->session->get('facebook.'.$this->getId());
 	}
 }

@@ -48,6 +48,20 @@ trait FacebookRouteTrait
     }
 
     /**
+     * Add Facebook application page admin requirements
+     */
+    public function requirePageAdmin()
+    {
+        $this->setOption('facebook.page_admin', true);
+
+        if (count($contexts) !== 1 || !in_array('page', $contexts)) {
+            throw new \RuntimeException('Unable to require a Facebook page administrator: the route must be restricted to a page context only');
+        }
+
+        return $this;
+    }
+
+    /**
      * Add an array of values to an option
      *
      * @param string $key
