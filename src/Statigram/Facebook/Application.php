@@ -187,4 +187,10 @@ class Application extends BaseApplication
 	{
 		return $this->session->get('facebook.'.$this->getId());
 	}
+    
+    
+    public function getSignedRequest()
+	{
+		return $this->client->getSignedRequest();
+	}
 }
