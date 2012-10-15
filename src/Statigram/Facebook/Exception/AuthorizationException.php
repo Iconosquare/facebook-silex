@@ -11,6 +11,6 @@ class AuthorizationException extends FacebookException
 {
 	public function __construct($message)
 	{
-		parent::__construct(403, $message);
+		parent::__construct(200, $message);
 	}
 }
