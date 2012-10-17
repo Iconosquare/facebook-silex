@@ -94,7 +94,7 @@ class Application extends BaseApplication
 	public function getPermissions()
 	{
 		if (!$this->isAuthorized()) {
-			throw new FacebookAuthorizationException('Unable to check permission since the user didn\'t allow the application');
+			throw new AuthorizationException('Unable to check permission since the user didn\'t allow the application');
 		}
 
 		return $this->client->getPermissions($this->getContext()->getUser()->getAccess()->getToken());	
