@@ -62,14 +62,6 @@ class FacebookListener implements EventSubscriberInterface
 
     public function checkContexts(GetResponseEvent $event) 
     {
-        if (!$this->application->hasContext()) {
-            throw new \Exception('Unable to access the application outside a Facebook context');
-
-            if (null !== $this->logger) {
-                $this->logger->error(sprintf('No Facebook context'));
-            }
-        }
-
         $contexts = $this->getRequirements($event, 'facebook.contexts');
         if (null === $contexts) {
             return; // no context restriction
@@ -77,6 +69,10 @@ class FacebookListener implements EventSubscriberInterface
 
         if (!$this->application->hasContext()) {
             throw new ContextException('Application is not in a Facebook context');
+
+            if (null !== $this->logger) {
+                $this->logger->error(sprintf('No Facebook context'));
+            }
         }
 
         $currentContext = $this->application->getContext();
