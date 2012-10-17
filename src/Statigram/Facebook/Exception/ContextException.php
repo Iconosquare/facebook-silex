@@ -11,6 +11,6 @@ class ContextException extends FacebookException
 {
 	public function __construct($message)
 	{
-		parent::__construct(400, $message);
+		parent::__construct(200, $message);
 	}
 }
