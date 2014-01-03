@@ -15,7 +15,7 @@ class Application extends BaseApplication
 	public function __construct($id, $secret, $canvasUrl, array $scopes, SessionInterface $session, Client $client)
 	{
 		parent::__construct($id);
-		
+
 		$this->setCanvasUrl($canvasUrl);
 		$this->setSecret($secret);
 		$this->setScopes($scopes);
@@ -27,7 +27,7 @@ class Application extends BaseApplication
 	/**
 	 * Check whether the application is loaded in a Facebook Canvas
 	 *
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function isCanvas()
 	{
@@ -37,11 +37,11 @@ class Application extends BaseApplication
 	/**
 	 * Check whether the application is loaded in a Facebook Tab
 	 *
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function isTab()
 	{
-		return 'tab' === $this->getContext()->getType(); 
+		return 'tab' === $this->getContext()->getType();
 	}
 
 	/**
@@ -49,9 +49,9 @@ class Application extends BaseApplication
 	 *
 	 * Without parameters, the redirect uri is set to the facebook canvas url (apps.facebook.com/...)
 	 *
-	 * @param string $redirectUri (Optional) An absolute url to be redirected 
+	 * @param string $redirectUri (Optional) An absolute url to be redirected
 	 *
-	 * @return string 
+	 * @return string
 	 */
 	public function getAuthorizationUrl($redirectUri = null)
 	{
@@ -71,7 +71,7 @@ class Application extends BaseApplication
 	 */
 	public function authorize($redirectUri = null)
 	{
-		return $this->redirect($this->getAuthorizationUrl($redirectUri));
+		return $this->redirect($this->getAuthorizationUrl($redirectUri), 'application_auth');
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Application extends BaseApplication
 			throw new AuthorizationException('Unable to check permission since the user didn\'t allow the application');
 		}
 
-		return $this->client->getPermissions($this->getContext()->getUser()->getAccess()->getToken());	
+		return $this->client->getPermissions($this->getContext()->getUser()->getAccess()->getToken());
 	}
 
 	/**
@@ -153,9 +153,9 @@ class Application extends BaseApplication
 	 *
 	 * @return Statigram\Facebook\Response
 	 */
-	public function redirect($url)
+	public function redirect($url, $context = '')
 	{
-		return new RedirectResponse($url);
+		return new RedirectResponse($url, $context);
 	}
 
 	/**
@@ -187,8 +187,8 @@ class Application extends BaseApplication
 	{
 		return $this->session->get('facebook.'.$this->getId());
 	}
-    
-    
+
+
     public function getSignedRequest()
 	{
 		return $this->client->getSignedRequest();

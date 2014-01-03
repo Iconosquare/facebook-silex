@@ -82,7 +82,7 @@ trait FacebookTrait
 	/**
 	 * Check whether the application is loaded in a Facebook Canvas
 	 *
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function isCanvas()
 	{
@@ -92,7 +92,7 @@ trait FacebookTrait
 	/**
 	 * Check whether the application is loaded in a Facebook Tab
 	 *
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function isTab()
 	{
@@ -154,7 +154,7 @@ trait FacebookTrait
 	 *
 	 * @param string $redirectUri
 	 *
-	 * @return string 
+	 * @return string
 	 */
 	public function getAuthorizationUrl($redirectUri = null)
 	{
@@ -181,8 +181,8 @@ trait FacebookTrait
 	 *
 	 * @return Statigram\Facebook\Response
 	 */
-	public function redirectFacebook($url)
+	public function redirectFacebook($url, $context = '')
 	{
-		return return $this['facebook.application']->redirect($url);
+		return return $this['facebook.application']->redirect($url, $context);
 	}
 }
