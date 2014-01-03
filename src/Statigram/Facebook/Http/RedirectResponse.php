@@ -5,7 +5,7 @@ namespace Statigram\Facebook\Http;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Facebook Redirect Response 
+ * Facebook Redirect Response
  *
  * Javascript redirect response for Facebook
  *
@@ -20,7 +20,7 @@ class RedirectResponse extends Response
 	 */
 	public function __construct($url)
 	{
-		if (strpos($url, 'http') !== 0) {
+		if (strpos($url, 'http') !== 0 && substr($url, 0, 2) !== '//') {
 			throw new \InvalidArgumentException(sprintf('Invalid url: the url "%s" is not an absolute HTTP|TLS url', $url));
 		}
 
