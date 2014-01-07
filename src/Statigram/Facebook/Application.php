@@ -71,7 +71,7 @@ class Application extends BaseApplication
 	 */
 	public function authorize($redirectUri = null)
 	{
-		return $this->redirect($this->getAuthorizationUrl($redirectUri), 'application_auth');
+		return $this->redirect($this->getAuthorizationUrl($redirectUri));
 	}
 
 	/**
@@ -155,7 +155,7 @@ class Application extends BaseApplication
 	 */
 	public function redirect($url, $context = '')
 	{
-		return new RedirectResponse($url, $context);
+		return new RedirectResponse($url);
 	}
 
 	/**

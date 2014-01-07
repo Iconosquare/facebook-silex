@@ -183,6 +183,6 @@ trait FacebookTrait
 	 */
 	public function redirectFacebook($url, $context = '')
 	{
-		return $this['facebook.application']->redirect($url, $context);
+		return $this['facebook.application']->redirect($url);
 	}
 }
