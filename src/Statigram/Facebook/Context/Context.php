@@ -12,7 +12,7 @@ use Statigram\Facebook\Model\User;
 abstract class Context
 {
 	/**
-	 * @var Statigram\Facebook\User Current Facebook user
+	 * @var \Statigram\Facebook\Model\User Current Facebook user
 	 */
 	private $user;
 
@@ -29,19 +29,17 @@ abstract class Context
 	/**
 	 * Return the Facebook user
 	 *
-	 * @return Statigram\Facebook\User
+	 * @return \Statigram\Facebook\Model\User
 	 */
 	public function getUser()
 	{
 		return $this->user;
 	}
 
-	/**
-	 * Define the Facebook user
-	 *
-	 * @param Statigram\Facebook\User
-	 */
-	public function setUser(User $user)
+    /**
+     * @param User $user
+     */
+    public function setUser(User $user)
 	{
 		$this->user = $user;
 	}

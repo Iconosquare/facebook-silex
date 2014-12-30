@@ -35,7 +35,7 @@ class User
 	private $locale;
 
 	/**
-	 * @var Statigram\Facebook\Access Facebook OAuth access token
+	 * @var \Statigram\Facebook\oAuth\Access Facebook OAuth access token
 	 */
 	private $access;
 
@@ -67,7 +67,7 @@ class User
 	 */
 	public function getEmail()
 	{
-		return $email;
+		return $this->email;
 	}
 
 	/**
@@ -133,19 +133,17 @@ class User
 	/**
 	 * Return the Facebook user OAuth access token
 	 *
-	 * @return Statigram\Facebook\Access
+	 * @return \Statigram\Facebook\oAuth\Access
 	 */
 	public function getAccess()
 	{
 		return $this->access;
 	}
 
-	/**
-	 * Define the Facebook user OAuth access token
-	 *
-	 * @param Statigram\Facebook\Access
-	 */
-	public function setAccess(Access $access)
+    /**
+     * @param Access $access
+     */
+    public function setAccess(Access $access)
 	{
 		$this->access = $access;
 	}

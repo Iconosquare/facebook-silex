@@ -15,7 +15,7 @@
       "facebook/php-sdk": "dev-master"
   },
   "require-dev": {
-      "mageekguy/atoum": "dev-master"
+      "atoum/atoum": "dev-master"
   },
   "autoload": {
       "psr-0": { "Statigram": "src/" }

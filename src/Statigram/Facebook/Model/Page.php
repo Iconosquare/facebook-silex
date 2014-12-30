@@ -18,6 +18,8 @@ class Page
 	private $id;
 	private $admin;
 	private $liked;
+
+    /** @var  \Statigram\Facebook\OAuth\Access */
 	private $access;
 
 	public function __construct($id)

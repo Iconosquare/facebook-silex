@@ -70,9 +70,9 @@ class FacebookListener implements EventSubscriberInterface
         if (!$this->application->hasContext()) {
             throw new ContextException('Application is not in a Facebook context');
 
-            if (null !== $this->logger) {
-                $this->logger->error(sprintf('No Facebook context'));
-            }
+//            if (null !== $this->logger) {
+//                $this->logger->error(sprintf('No Facebook context'));
+//            }
         }
 
         $currentContext = $this->application->getContext();

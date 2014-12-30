@@ -8,136 +8,150 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * Facebook php-sdk wrapper
  *
  * @author Ludovic Fleury <ludo.fleury@gmail.com>
+ * @author Bill'O <ateilhet@gmail.com>
  */
 class Client extends \Facebook
 {
-	protected static $allowedKeys = array('state', 'code', 'access_token', 'user_id');
-	protected $session;
+    const apiVersion = 'v2.2';
 
-	public function __construct(SessionInterface $session, $id, $secret)
-	{
-		$this->session = $session;
-		$this->session->start();
-		parent::__construct(array('appId' => $id, 'secret' => $secret));
-	}
+    protected static $allowedKeys = array('state', 'code', 'access_token', 'user_id');
+    protected $session;
 
-	public function getUser($accessToken = null)
-	{
-		$content = $this->api('/me');
+    public function __construct(SessionInterface $session, $id, $secret)
+    {
+        $this->session = $session;
+        $this->session->start();
+        parent::__construct(array('appId' => $id, 'secret' => $secret));
+    }
 
-		if (!empty($content)) {
-			return null;
-		}
+    public function getUser($accessToken = null)
+    {
+        $content = $this->api('/'.self::apiVersion.'/me');
 
-		$user = new Model\User();
-		$user->setEmail($content['email']);
+        if (!empty($content)) {
+            return null;
+        }
 
-		return $user;
-	}
+        $user = new Model\User();
+        $user->setEmail(isset($content['email']) ? $content['email'] : '');
 
-	public function getPermissions()
-	{
-		$content = $this->api('/me/permissions');
+        return $user;
+    }
 
-        return $content['data'][0];
-	}
+    public function getPermissions()
+    {
+        $content = $this->api('/'.self::apiVersion.'/me/permissions');
+
+        // Hack to format the data as in v1.0, thus avoiding
+        // MANY reimplementation of getPermissions
+        $return = array();
+        foreach ($content['data'] as $permission) {
+            $return[$permission['permission']] = ('granted' === $permission['status']) ? 1 : 0;
+        }
+
+        return ('v1.0' === self::apiVersion) ? $content['data'][0] : $return;
+    }
 
     public function getPages()
-	{
-		$content = $this->api('/me/accounts');
+    {
+        $content = $this->api('/'.self::apiVersion.'/me/accounts');
 
-		$pages = array();
-		$pages = array_filter($content['data'], function($account) {
-			return $account['category'] != 'Application';
-		});
+        $pages = array_filter($content['data'], function($account) {
+                return $account['category'] != 'Application';
+            });
 
         return $pages;
-	}
+    }
 
-	/**
-	 * Get an installed tab
-	 *
-	 * @see https://developers.facebook.com/docs/reference/api/page/#tabs §Testing App Installs
-	 */
-	public function getTab(Model\Page $page, Model\Application $application)
-	{
-		$url = sprintf('/%s/tabs/%s', $page->getId(), $application->getId());
-		
-		$content = $this->api($url);
+    /**
+     * Get an installed tab
+     *
+     * @see https://developers.facebook.com/docs/reference/api/page/#tabs §Testing App Installs
+     */
+    public function getTab(Model\Page $page, Model\Application $application)
+    {
+        $url = sprintf('/%s/tabs/%s', $page->getId(), $application->getId());
+        $parameters = array(
+            'app_id' =>  $application->getId(),
+            'access_token' => $page->getAccess()->getToken()
+        );
 
-		if (empty($content['data'])) {
+        $content = $this->api('/'.self::apiVersion.$url, 'get', $parameters);
 
-			return null;
-		}
+        if (empty($content['data'])) {
 
-		$application = new Model\Application($content['data']['application']['id']);
-		$application->setName($content['data']['application']['name']);
+            return null;
+        }
 
-		$tab = new Model\Tab($content['data']['id']);
-		$tab->setName($content['data']['name']);
-		$tab->setLink($content['data']['link']);
-		$tab->setApplication($application);
-		$tab->setPosition($content['data']['position']);
-		
-		return $tab;
-	}
+        $application = new Model\Application($content['data']['application']['id']);
+        $application->setName($content['data']['application']['name']);
 
-	public function addTab(Page $page, Application $application)
-	{
-		$url = sprintf('/%s/tabs', $page->getId());
-		$parameters = array(
-			'app_id' =>  $application->getId(),
-			'access_token' => $page->getAccess()->getToken()
-		);
+        $tab = new Model\Tab($content['data']['id']);
+        $tab->setName($content['data']['name']);
+        $tab->setLink($content['data']['link']);
+        $tab->setApplication($application);
+        $tab->setPosition($content['data']['position']);
 
-		$content = $this->api($url, 'post', $parameters);
-	}
+        return $tab;
+    }
 
-	protected function setPersistentData($key, $value) 
-	{
-	    if (!in_array($key, self::$allowedKeys)) {
-	      self::errorLog('Unsupported key passed to setPersistentData.');
-	      return;
-	    }
+// Unused
+//	public function addTab(Page $page, Application $application)
+//	{
+//		$url = sprintf('/%s/tabs', $page->getId());
+//		$parameters = array(
+//			'app_id' =>  $application->getId(),
+//			'access_token' => $page->getAccess()->getToken()
+//		);
+//
+//		$content = $this->api('/'.self::apiVersion.$url, 'post', $parameters);
+//	}
 
-	    $formattedKey = $this->constructSessionVariableName($key);
+    protected function setPersistentData($key, $value)
+    {
+        if (!in_array($key, self::$allowedKeys)) {
+            self::errorLog('Unsupported key passed to setPersistentData.');
+            return;
+        }
 
-	    $this->session->set($formattedKey, $value);
-  	}
+        $formattedKey = $this->constructSessionVariableName($key);
 
-	protected function getPersistentData($key, $default = false) 
-	{
-		if (!in_array($key, self::$allowedKeys)) {
-		  self::errorLog('Unsupported key passed to getPersistentData.');
-		  return $default;
-		}
+        $this->session->set($formattedKey, $value);
+    }
 
-		$formattedKey = $this->constructSessionVariableName($key);
+    protected function getPersistentData($key, $default = false)
+    {
+        if (!in_array($key, self::$allowedKeys)) {
+            self::errorLog('Unsupported key passed to getPersistentData.');
+            return $default;
+        }
 
-		return $this->session->get($formattedKey, $default);
-	}
+        $formattedKey = $this->constructSessionVariableName($key);
 
-	protected function clearPersistentData($key) 
-	{
-		if (!in_array($key, self::$allowedKeys)) {
-		  self::errorLog('Unsupported key passed to clearPersistentData.');
-		  return;
-		}
+        return $this->session->get($formattedKey, $default);
+    }
 
-		$formattedKey = $this->constructSessionVariableName($key);
-		
-		$this->session->remove($formattedKey);
-	}
+    protected function clearPersistentData($key)
+    {
+        if (!in_array($key, self::$allowedKeys)) {
+            self::errorLog('Unsupported key passed to clearPersistentData.');
+            return;
+        }
 
-	protected function clearAllPersistentData() 
-	{
-		foreach (self::$allowedKeys as $key) {
-			$this->clearPersistentData($key);
-		}
-	}
+        $formattedKey = $this->constructSessionVariableName($key);
 
-	protected function constructSessionVariableName($key) 
-	{
-		return 'facebook.'.$this->getAppId().'.client.'.$key;
-	}
+        $this->session->remove($formattedKey);
+    }
+
+    protected function clearAllPersistentData()
+    {
+        foreach (self::$allowedKeys as $key) {
+            $this->clearPersistentData($key);
+        }
+    }
+
+    protected function constructSessionVariableName($key)
+    {
+        return 'facebook.'.$this->getAppId().'.client.'.$key;
+    }
 }

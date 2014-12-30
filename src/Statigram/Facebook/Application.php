@@ -7,6 +7,12 @@ use Statigram\Facebook\Http\RedirectResponse;
 use Statigram\Facebook\Model\Application as BaseApplication;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+/**
+ * Class Application
+ * @package Statigram\Facebook
+ * @author Ludovic Fleury <ludo.fleury@gmail.com>
+ * @author Bill'O <ateilhet@gmail.com>
+ */
 class Application extends BaseApplication
 {
 	private $session;
@@ -62,14 +68,14 @@ class Application extends BaseApplication
 		return $this->client->getLoginUrl($parameters);
 	}
 
-	/**
-	 * Request a facebook authorization from an user
-	 *
-	 * Return a special redirection response for facebook to the authorization endpoint
-	 *
-	 * @return Statigram\Facebook\Response
-	 */
-	public function authorize($redirectUri = null)
+    /**
+     * Request a facebook authorization from an user
+     * Return a special redirection response for facebook to the authorization endpoint
+     *
+     * @param null $redirectUri
+     * @return RedirectResponse
+     */
+    public function authorize($redirectUri = null)
 	{
 		return $this->redirect($this->getAuthorizationUrl($redirectUri));
 	}
@@ -84,14 +90,14 @@ class Application extends BaseApplication
 		return $this->getContext()->getUser()->hasAccess();
 	}
 
-	/**
-	 * Return the Facebook application permissions
-	 *
-	 * List of permissions allowed to this application by the current user
-	 *
-	 * @return array
-	 */
-	public function getPermissions()
+    /**
+     * Return the Facebook application permissions
+     * List of permissions allowed to this application by the current user
+     *
+     * @return array
+     * @throws Exception\AuthorizationException
+     */
+    public function getPermissions()
 	{
 		if (!$this->isAuthorized()) {
 			throw new AuthorizationException('Unable to check permission since the user didn\'t allow the application');
@@ -100,14 +106,11 @@ class Application extends BaseApplication
 		return $this->client->getPermissions($this->getContext()->getUser()->getAccess()->getToken());
 	}
 
-	/**
-	 * Check whether the Facebook application has a specific permission
-	 *
-	 * @param string $permission
-	 *
-	 * @return boolean
-	 */
-	public function hasPermission($permission)
+    /**
+     * @param $permissions
+     * @return bool
+     */
+    public function hasPermission($permissions)
 	{
 		$granted = $this->getPermissions();
 
@@ -145,15 +148,16 @@ class Application extends BaseApplication
         return $missing;
 	}
 
-	/**
-	 * Return a javascript redirect reponse
-	 *
-	 * Facebook context load the application in a iframe and requires a special redirection
-	 * @see https://developers.facebook.com/docs/authentication/canvas/ §2a. Redirect to OAuth Dialog upon page load
-	 *
-	 * @return Statigram\Facebook\Response
-	 */
-	public function redirect($url, $context = '')
+    /**
+     * Return a javascript redirect reponse
+     *
+     * Facebook context load the application in a iframe and requires a special redirection
+     * @see https://developers.facebook.com/docs/authentication/canvas/ §2a. Redirect to OAuth Dialog upon page load
+     *
+     * @param $url
+     * @return RedirectResponse
+     */
+    public function redirect($url)
 	{
 		return new RedirectResponse($url);
 	}
@@ -181,7 +185,7 @@ class Application extends BaseApplication
 	/**
 	 * Retrieve the Facebook context
 	 *
-	 * @return string
+	 * @return \Statigram\Facebook\Context\Context
 	 */
 	public function getContext()
 	{

@@ -12,7 +12,7 @@ trait FacebookTrait
 	/**
 	 * Return the Graph API client
 	 *
-	 * @return Statigram\Facebook\Client
+	 * @return \Statigram\Facebook\Client
 	 */
 	public function getClient()
 	{
@@ -26,7 +26,10 @@ trait FacebookTrait
 	 */
 	public function getId()
 	{
-		return $this['facebook']->getId();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->getId();
 	}
 
 	/**
@@ -36,7 +39,10 @@ trait FacebookTrait
 	 */
 	public function getSecret()
 	{
-		return $this['facebook']->getSecret();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->getSecret();
 	}
 
 	/**
@@ -46,7 +52,10 @@ trait FacebookTrait
 	 */
 	public function getCanvasUrl()
 	{
-		return $this['facebook']->getCanvasUrl();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->getCanvasUrl();
 	}
 
 	/**
@@ -56,7 +65,10 @@ trait FacebookTrait
 	 */
 	public function hasContext()
 	{
-		return $this['facebook.application']->hasContext();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->hasContext();
 	}
 
 	/**
@@ -66,7 +78,10 @@ trait FacebookTrait
 	 */
 	public function setContext($context)
 	{
-		$this['facebook.application']->setContext($context);
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+        $facebook->setContext($context);
 	}
 
 	/**
@@ -76,7 +91,10 @@ trait FacebookTrait
 	 */
 	public function getContext()
 	{
-		return $this['facebook.application']->getContext();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->getContext();
 	}
 
 	/**
@@ -86,7 +104,10 @@ trait FacebookTrait
 	 */
 	public function isCanvas()
 	{
-		return $this['facebook.application']->isCanvas();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->isCanvas();
 	}
 
 	/**
@@ -96,7 +117,10 @@ trait FacebookTrait
 	 */
 	public function isTab()
 	{
-		return $this['facebook.application']->isTab();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->isTab();
 	}
 
 	/**
@@ -106,7 +130,10 @@ trait FacebookTrait
 	 */
 	public function isAuthorized()
 	{
-		return $this['facebook']->isAuthorized();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->isAuthorized();
 	}
 
 	/**
@@ -118,7 +145,10 @@ trait FacebookTrait
 	 */
 	public function getPermissions()
 	{
-		return $this['facebook']->getPermissions();
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->getPermissions();
 	}
 
 	/**
@@ -130,7 +160,10 @@ trait FacebookTrait
 	 */
 	public function hasPermission($permission)
 	{
-		return $this['facebook']->hasPermission($permission);
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->hasPermission($permission);
 	}
 
 	/**
@@ -146,7 +179,10 @@ trait FacebookTrait
 	 */
 	public function validatePermissions(array $permissions)
 	{
-		return $this['facebook']->validatePermissions($permissions);
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook'];
+
+		return $facebook->validatePermissions($permissions);
 	}
 
 	/**
@@ -158,31 +194,33 @@ trait FacebookTrait
 	 */
 	public function getAuthorizationUrl($redirectUri = null)
 	{
-		return $this['facebook.application']->getAuthorizationUrl($redirectUri);
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->getAuthorizationUrl($redirectUri);
 	}
 
-	/**
-	 * Request a facebook authorization from an user
-	 *
-	 * Return a special redirection response for facebook to the authorization endpoint
-	 *
-	 * @return Statigram\Facebook\Response
-	 */
-	public function requestAuthorization($redirectUri = null)
+    /**
+     * @param null $redirectUri
+     * @return \Statigram\Facebook\Http\RedirectResponse
+     */
+    public function requestAuthorization($redirectUri = null)
 	{
-		return $this['facebook.application']->authorize($redirectUri);
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->authorize($redirectUri);
 	}
 
-	/**
-	 * Return a javascript redirect reponse
-	 *
-	 * Facebook context load the application in a iframe and requires a special redirection
-	 * @see https://developers.facebook.com/docs/authentication/canvas/ §2a. Redirect to OAuth Dialog upon page load
-	 *
-	 * @return Statigram\Facebook\Response
-	 */
-	public function redirectFacebook($url, $context = '')
+    /**
+     * @param $url
+     * @return \Statigram\Facebook\Http\RedirectResponse
+     */
+    public function redirectFacebook($url)
 	{
-		return $this['facebook.application']->redirect($url);
+        /** @var \Statigram\Facebook\Application $facebook */
+        $facebook = $this['facebook.application'];
+
+		return $facebook->redirect($url);
 	}
 }
